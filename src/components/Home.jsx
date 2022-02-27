@@ -46,9 +46,8 @@ export default function Home() {
   useEffect(() => {
     setLoader(true);
     dispatch(getAllActivity());
-    timer(1000);
     dispatch(getAllCountries());
-
+    timer(3000);
     return () => clearTimeout(timer);
   }, [dispatch]);
 
@@ -76,7 +75,7 @@ export default function Home() {
     setLoader(true);
     dispatch(getAllCountries());
     dispatch(setCurrentPage(1));
-    timer(500);
+    timer(1000);
   };
 
   return (
@@ -106,7 +105,7 @@ export default function Home() {
         {loader ? (
           <Loader />
         ) : (
-          (countries.length > 0 &&
+          (currentCountries.length > 0 &&
             currentCountries?.map((country, index) => (
               <Country
                 key={index}
