@@ -24,7 +24,6 @@ import { ContainerHome, Countries, Btns, NoResult } from "../styles/Home";
 export default function Home() {
   const dispatch = useDispatch();
   const { countries, page, allActivity } = useSelector((state) => state);
-  const [loader, setLoader] = useState(true);
   const [filters, setFilters] = useState(false);
   const [, setOrder] = useState();
   let countriesPerPage = 10;
@@ -38,17 +37,9 @@ export default function Home() {
     indexOfLastCountry
   );
 
-  const timer = (time) =>
-    setTimeout(() => {
-      setLoader(false);
-    }, time);
-
   useEffect(() => {
-    setLoader(true);
     dispatch(getAllActivity());
     dispatch(getAllCountries());
-    timer(3000);
-    return () => clearTimeout(timer);
   }, [dispatch]);
 
   const handleFilterContinent = (e) => {
@@ -72,10 +63,8 @@ export default function Home() {
 
   const handleClick = (e) => {
     e.preventDefault();
-    setLoader(true);
     dispatch(getAllCountries());
     dispatch(setCurrentPage(1));
-    timer(1000);
   };
 
   return (
@@ -102,10 +91,10 @@ export default function Home() {
       )}
       <Paged countriesPerPage={countriesPerPage} />
       <Countries>
-        {loader ? (
+        {countries.length === 0 ? (
           <Loader />
         ) : (
-          (currentCountries.length > 0 &&
+          (countries.length > 0 &&
             currentCountries?.map((country, index) => (
               <Country
                 key={index}
